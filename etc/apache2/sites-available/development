@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+	# However, you must set it for any further virtual host explicitly.
+	#ServerName www.example.com
+
+	ServerAdmin webmaster@localhost
+	DocumentRoot /vagrant/www/html
+
+	ErrorLog /vagrant/www/log/error.log
+	CustomLog /vagrant/www/log/access.log combined
+    <IfModule mod_alias.c>
+		<IfModule mod_cgi.c>
+				Define ENABLE_USR_LIB_CGI_BIN
+		</IfModule>
+
+		<IfModule mod_cgid.c>
+				Define ENABLE_USR_LIB_CGI_BIN
+		</IfModule>
+
+		<IfDefine ENABLE_USR_LIB_CGI_BIN>
+			ScriptAlias /cgi-bin/ /vagrant/www/cgi-bin/
+			<Directory "/vagrant/www/cgi-bin">
+				AllowOverride None
+				Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+				Require all granted
+			</Directory>
+		</IfDefine>
+    </IfModule>
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
